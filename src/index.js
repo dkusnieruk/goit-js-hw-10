@@ -1,6 +1,6 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
-
+import debounce from 'lodash.debounce';
 const DEBOUNCE_DELAY = 300;
 
 const getInput = document.getElementById("search-box");
@@ -60,8 +60,8 @@ function initialize(countriesData){
 } else {
      options += `
      <div class ="header">
-     <p><img src="${countries[0].flags.svg}"</p>
-     <h3>${countries[0].name}</h3>
+     <p><img class="image" src="${countries[0].flags.svg}"</p>
+     <h3 class="country">${countries[0].name}</h3>
      </div>
      <div><b>Capital :</b> ${countries[0].capital} </div>
      <div><b>Population :</b> ${countries[0].population}</div>
@@ -78,8 +78,10 @@ getInput.addEventListener(`input`, (event)=>{
 
 const currentInput=event.target.value;   
 
-fetchCountries(currentInput.trim(""));
+debounce(
+fetchCountries(currentInput.trim("")),DEBOUNCE_DELAY);
 })
+
 
 
     
