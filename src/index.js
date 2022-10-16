@@ -74,12 +74,11 @@ function initialize(countriesData){
 getList.innerHTML =options;
  };
     
-getInput.addEventListener(`input`, (event)=>{
+const debounceValue = debounce (fetchCountries,DEBOUNCE_DELAY);
 
+getInput.addEventListener(`input`, (event)=>{    
 const currentInput=event.target.value;   
-
-debounce(
-fetchCountries(currentInput.trim("")),DEBOUNCE_DELAY);
+debounceValue(currentInput.trim(""));
 })
 
 
