@@ -5,6 +5,7 @@ const DEBOUNCE_DELAY = 300;
 
 const getInput = document.getElementById("search-box");
 const getList = document.querySelector(`ul`);
+const getIndex =document.querySelector(`li`);
 const getCountryInfo=document.getElementsByClassName("country-info");
 let countries;
 function fetchCountries(name){
@@ -22,7 +23,17 @@ function fetchCountries(name){
         initialize(data);
     })
     .catch((error)=>{
-        console.log("Error: " + error)
+        Notiflix.Notify.warning(
+            "Oops, there is no country with that name",
+            {
+            width:`300px`,
+            useFontAwesome: true,
+            warning: {
+                background: `red`,
+                textColor:`white`,
+            }
+            },
+          )
     })
     
     
@@ -37,7 +48,7 @@ function initialize(countriesData){
             width:"250px",
         })
 
-    } else if (countries.length<10 && countries.length>2) {
+    } else if (countries.length<10 && countries.length>1) {
     for( let i =0; i < countries.length; i++){
         options += `<li>
         <p><img src="${countries[i].flags.svg}"</p>
@@ -48,11 +59,15 @@ function initialize(countriesData){
    
 } else {
      options += `
+     <div class ="header">
      <p><img src="${countries[0].flags.svg}"</p>
-     <p>${countries[0].name}</p>
-     <div>Capital : ${countries[0].population} </div>
-     <div>Population : ${countries[0].capital}</div>
-     <div>Languages: ${countries[0].languages.name}</div>
+     <h3>${countries[0].name}</h3>
+     </div>
+     <div><b>Capital :</b> ${countries[0].capital} </div>
+     <div><b>Population :</b> ${countries[0].population}</div>
+     <div><b>Languages:</b> ${(countries[0].languages).map((lang)=>{
+        return lang.name;
+     })}</div>
      </li>`
     
 }
@@ -60,8 +75,10 @@ getList.innerHTML =options;
  };
     
 getInput.addEventListener(`input`, (event)=>{
-  
-fetchCountries(event.target.value);
+
+const currentInput=event.target.value;   
+
+fetchCountries(currentInput.trim(""));
 })
 
 
